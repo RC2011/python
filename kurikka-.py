@@ -102,16 +102,12 @@ BLUE = (100, 100, 255)
 BLACK = (0, 0, 0)
 ORIZINARU = (0, 230, 0)
 
-LCD = LCD_font_styles_ku
 screen = pygame.display.set_mode([600, 600])
 pygame.display.set_caption("pan clikker")
 mouse_x, mouse_y = pygame.mouse.get_pos()
 panseisan = 1
 panseisankane = 50
 panseisanhyouzi = 0
-koeta = 0
-zikan = 2
-kieru = 0
 pannnokazu = 0
 kanenoryou = 5
 panseisanurikire = 0
