@@ -22,7 +22,7 @@ pannnokazu = 0
 panseisan = 1
 seisansita = 1
 utta = 1
-kane = 9999999999
+kane = 0
 panseisankane = 50
 panseisanhyouzi = 0
 kanenoryou = 5
@@ -198,9 +198,10 @@ while running:
         if mouse_x > 430 and mouse_x < 528 and mouse_y > 14 and mouse_y < 73:
             if event.type == MOUSEBUTTONDOWN:
                 if pannnokazu > 0:
-                    kane=  (kane + kanenoryou * pannnokazu)
-                    pannnokazu = 0
-                    utta = 1
+                    if kane + kanenoryou * pannnokazu < 99999999999:
+                        kane=  (kane + kanenoryou * pannnokazu)
+                        pannnokazu = 0
+                        utta = 1
         # 生産力up！
         if mouse_x > 10 and mouse_x < 260 and mouse_y > 100 and mouse_y <160:
             if event.type == MOUSEBUTTONDOWN:
