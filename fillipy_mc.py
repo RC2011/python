@@ -19,55 +19,55 @@ from param_mc_remote import block
 import random, sys, pygame, time, copy
 from pygame.locals import *
 
-mcx, mcy, mcz = 20, param.Y_SEA + 43, -40
+x, y, z = 20, param.Y_SEA + 43, -40
 
 mc = Minecraft.create(address=param.ADRS_MCR, port=param.PORT_MCR)
-mc.setPlayer(param.PLAYER_NAME, PO.mcx, PO.mcy, PO.mcz)
+mc.setPlayer(param.PLAYER_NAME, PO.x, PO.y, PO.z)
 
 for _i in range(33):
     for _i in range(33):
         mc.setBlock(
-            mcx, mcy, mcz, param.block.BLUE_CONCRETE)
+            x, y, z, param.block.BLUE_CONCRETE)
         
-        mcx -= 1
+        x -= 1
     
-    mcx += 33
-    mcy += 1
+    x += 33
+    y += 1
 
-mcx, mcy, mcz = 19, param.Y_SEA + 44, -40
+x, y, z = 19, param.Y_SEA + 44, -40
 for _i in range(31):
     for _i in range(31):
         mc.setBlock(
-            mcx, mcy, mcz, param.block.GREEN_CONCRETE)
+            x, y, z, param.block.GREEN_CONCRETE)
         
-        mcx -= 1
+        x -= 1
     
-    mcx += 31
-    mcy += 1
+    x += 31
+    y += 1
 
-mcx, mcy, mcz = 16, param.Y_SEA + 44, -40
+x, y, z = 16, param.Y_SEA + 44, -40
 for _i in range(7):
     for _i in range(31):
         mc.setBlock(
-            mcx, mcy, mcz, param.block.BLUE_CONCRETE)
-        mcy += 1
-    mcy -= 31
+            x, y, z, param.block.BLUE_CONCRETE)
+        y += 1
+    y -= 31
     
-    mcx -= 4
+    x -= 4
 
-mcx, mcy, mcz = 19, param.Y_SEA + 47, -40
+x, y, z = 19, param.Y_SEA + 47, -40
 for _i in range(7):
     for _i in range(31):
         mc.setBlock(
-            mcx, mcy, mcz, param.block.BLUE_CONCRETE)
+            x, y, z, param.block.BLUE_CONCRETE)
         
-        mcx -= 1
+        x -= 1
     
-    mcx += 31
-    mcy += 4
+    x += 31
+    y += 4
 
 
-mcx, mcy, mcz = 19, param.Y_SEA + 44, -40
+x, y, z = 19, param.Y_SEA + 44, -40
 
 FPS = 10 # frames per second to update the screen
 WINDOWWIDTH = 640 # width of the program's window, in pixels
@@ -224,8 +224,8 @@ def runGame():
                 pygame.display.update()
 
             # Make the move and end the turn.
-            x, y = getComputerMove(mainBoard, computerTile)
-            makeMove(mainBoard, computerTile, x, y, True)
+            fillipyx, fillipyy = getComputerMove(mainBoard, computerTile)
+            makeMove(mainBoard, computerTile, fillipyx, fillipyy, True)
             if getValidMoves(mainBoard, playerTile) != []:
                 # Only set for the player's turn if they can make a move.
                 turn = 'player'
@@ -282,8 +282,8 @@ def runGame():
         MAINCLOCK.tick(FPS)
 
 
-def translateBoardToPixelCoord(x, y):
-    return XMARGIN + x * SPACESIZE + int(SPACESIZE / 2), YMARGIN + y * SPACESIZE + int(SPACESIZE / 2)
+def translateBoardToPixelCoord(fillipyx, fillipyy):
+    return XMARGIN + fillipyx * SPACESIZE + int(SPACESIZE / 2), YMARGIN + fillipyy * SPACESIZE + int(SPACESIZE / 2)
 
 
 def animateTileChange(tilesToFlip, tileColor, additionalTile):
@@ -302,13 +302,13 @@ def animateTileChange(tilesToFlip, tileColor, additionalTile):
     for yoko in range(8):
         for tate in range(8):
             if additionalTileY > 40 + sita and additionalTileY < 90 + sita and additionalTileX > 120 + migi and additionalTileX < 170 + migi:
-                mcx, mcy, mcz = -9 + mcmigi, param.Y_SEA + 72 - mcsita, -40
+                x, y, z = -9 + mcmigi, param.Y_SEA + 72 - mcsita, -40
                 for koma in range(3):
                     for koma in range(3):
-                        mc.setBlock(mcx, mcy, mcz, param.block.WHITE_CONCRETE if additionalTileColor == WHITE else param.block.BLACK_CONCRETE)
-                        mcx -= 1
-                    mcx += 3
-                    mcy += 1
+                        mc.setBlock(x, y, z, param.block.WHITE_CONCRETE if additionalTileColor == WHITE else param.block.BLACK_CONCRETE)
+                        x -= 1
+                    x += 3
+                    y += 1
             sita += 50
             mcsita += 4
         migi += 50
@@ -332,8 +332,8 @@ def animateTileChange(tilesToFlip, tileColor, additionalTile):
         elif tileColor == BLACK_TILE:
             color = tuple([255 - rgbValues] * 3) # rgbValues goes from 255 to 0
 
-        for x, y in tilesToFlip:
-            centerx, centery = translateBoardToPixelCoord(x, y)
+        for fillipyx, fillipyy in tilesToFlip:
+            centerx, centery = translateBoardToPixelCoord(fillipyx, fillipyy)
             pygame.draw.circle(DISPLAYSURF, color, (centerx, centery), int(SPACESIZE / 2) - 4) #ここで円を描いている
             sita = 0
             migi = 0
@@ -342,13 +342,13 @@ def animateTileChange(tilesToFlip, tileColor, additionalTile):
             for yoko in range(8):
                 for tate in range(8):
                     if additionalTileY > 40 + sita and additionalTileY < 90 + sita and additionalTileX > 120 + migi and additionalTileX < 170 + migi:
-                        mcx, mcy, mcz = -9 + mcmigi, param.Y_SEA + 72 - mcsita, -40
+                        x, y, z = -9 + mcmigi, param.Y_SEA + 72 - mcsita, -40
                         for koma in range(3):
                             for koma in range(3):
-                                mc.setBlock(mcx, mcy, mcz, param.block.WHITE_CONCRETE if additionalTileColor == WHITE else param.block.BLACK_CONCRETE)
-                                mcx -= 1
-                            mcx += 3
-                            mcy += 1
+                                mc.setBlock(x, y, z, param.block.WHITE_CONCRETE if additionalTileColor == WHITE else param.block.BLACK_CONCRETE)
+                                x -= 1
+                            x += 3
+                            y += 1
                     sita += 50
                     mcsita += 4
                 migi += 50
@@ -370,27 +370,27 @@ def drawBoard(board):
     DISPLAYSURF.blit(BGIMAGE, BGIMAGE.get_rect())
 
     # Draw grid lines of the board.
-    for x in range(BOARDWIDTH + 1):
+    for fillipyx in range(BOARDWIDTH + 1):
         # Draw the horizontal lines.
-        startx = (x * SPACESIZE) + XMARGIN
+        startx = (fillipyx * SPACESIZE) + XMARGIN
         starty = YMARGIN
-        endx = (x * SPACESIZE) + XMARGIN
+        endx = (fillipyx * SPACESIZE) + XMARGIN
         endy = YMARGIN + (BOARDHEIGHT * SPACESIZE)
         pygame.draw.line(DISPLAYSURF, GRIDLINECOLOR, (startx, starty), (endx, endy))
-    for y in range(BOARDHEIGHT + 1):
+    for fillipyy in range(BOARDHEIGHT + 1):
         # Draw the vertical lines.
         startx = XMARGIN
-        starty = (y * SPACESIZE) + YMARGIN
+        starty = (fillipyy * SPACESIZE) + YMARGIN
         endx = XMARGIN + (BOARDWIDTH * SPACESIZE)
-        endy = (y * SPACESIZE) + YMARGIN
+        endy = (fillipyy * SPACESIZE) + YMARGIN
         pygame.draw.line(DISPLAYSURF, GRIDLINECOLOR, (startx, starty), (endx, endy))
 
     # Draw the black & white tiles or hint spots.
-    for x in range(BOARDWIDTH):
-        for y in range(BOARDHEIGHT):
-            centerx, centery = translateBoardToPixelCoord(x, y)
-            if board[x][y] == WHITE_TILE or board[x][y] == BLACK_TILE:
-                if board[x][y] == WHITE_TILE:
+    for fillipyx in range(BOARDWIDTH):
+        for fillipyy in range(BOARDHEIGHT):
+            centerx, centery = translateBoardToPixelCoord(fillipyx, fillipyy)
+            if board[fillipyx][fillipyy] == WHITE_TILE or board[fillipyx][fillipyy] == BLACK_TILE:
+                if board[fillipyx][fillipyy] == WHITE_TILE:
                     tileColor = WHITE
                 else:
                     tileColor = BLACK
@@ -402,13 +402,13 @@ def drawBoard(board):
                 for yoko in range(8):
                     for tate in range(8):
                         if centery > 40 + sita and centery < 90 + sita and centerx > 120 + migi and centerx < 170 + migi:
-                            mcx, mcy, mcz = -9 + mcmigi, param.Y_SEA + 72 - mcsita, -40
+                            x, y, z = -9 + mcmigi, param.Y_SEA + 72 - mcsita, -40
                             for koma in range(3):
                                 for koma in range(3):
-                                    mc.setBlock(mcx, mcy, mcz, param.block.WHITE_CONCRETE if tileColor == WHITE else param.block.BLACK_CONCRETE)
-                                    mcx -= 1
-                                mcx += 3
-                                mcy += 1
+                                    mc.setBlock(x, y, z, param.block.WHITE_CONCRETE if tileColor == WHITE else param.block.BLACK_CONCRETE)
+                                    x -= 1
+                                x += 3
+                                y += 1
                         sita += 50
                         mcsita += 4
                     migi += 50
@@ -419,20 +419,20 @@ def drawBoard(board):
                 migi = 50
                 mcsita = 0
                 mcmigi = 0
-            if board[x][y] == HINT_TILE:
+            if board[fillipyx][fillipyy] == HINT_TILE:
                 pygame.draw.rect(DISPLAYSURF, HINTCOLOR, (centerx - 4, centery - 4, 8, 8))
 
 
 def getSpaceClicked(mousex, mousey):
     # Return a tuple of two integers of the board space coordinates where
     # the mouse was clicked. (Or returns None not in any space.)
-    for x in range(BOARDWIDTH):
-        for y in range(BOARDHEIGHT):
-            if mousex > x * SPACESIZE + XMARGIN and \
-               mousex < (x + 1) * SPACESIZE + XMARGIN and \
-               mousey > y * SPACESIZE + YMARGIN and \
-               mousey < (y + 1) * SPACESIZE + YMARGIN:
-                return (x, y)
+    for fillipyx in range(BOARDWIDTH):
+        for fillipyy in range(BOARDHEIGHT):
+            if mousex > fillipyx * SPACESIZE + XMARGIN and \
+               mousex < (fillipyx + 1) * SPACESIZE + XMARGIN and \
+               mousey > fillipyy * SPACESIZE + YMARGIN and \
+               mousey < (fillipyy + 1) * SPACESIZE + YMARGIN:
+                return (fillipyx, fillipyy)
     return None
 
 
@@ -447,9 +447,9 @@ def drawInfo(board, playerTile, computerTile, turn):
 
 def resetBoard(board):
     # Blanks out the board it is passed, and sets up starting tiles.
-    for x in range(BOARDWIDTH):
-        for y in range(BOARDHEIGHT):
-            board[x][y] = EMPTY_SPACE
+    for fillipyx in range(BOARDWIDTH):
+        for fillipyy in range(BOARDHEIGHT):
+            board[fillipyx][fillipyy] = EMPTY_SPACE
 
     # Add starting pieces to the center
     board[3][3] = WHITE_TILE
@@ -483,32 +483,32 @@ def isValidMove(board, tile, xstart, ystart):
     tilesToFlip = []
     # check each of the eight directions:
     for xdirection, ydirection in [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]:
-        x, y = xstart, ystart
-        x += xdirection
-        y += ydirection
-        if isOnBoard(x, y) and board[x][y] == otherTile:
+        fillipyx, fillipyy = xstart, ystart
+        fillipyx += xdirection
+        fillipyy += ydirection
+        if isOnBoard(fillipyx, fillipyy) and board[fillipyx][fillipyy] == otherTile:
             # The piece belongs to the other player next to our piece.
-            x += xdirection
-            y += ydirection
-            if not isOnBoard(x, y):
+            fillipyx += xdirection
+            fillipyy += ydirection
+            if not isOnBoard(fillipyx, fillipyy):
                 continue
-            while board[x][y] == otherTile:
-                x += xdirection
-                y += ydirection
-                if not isOnBoard(x, y):
+            while board[fillipyx][fillipyy] == otherTile:
+                fillipyx += xdirection
+                fillipyy += ydirection
+                if not isOnBoard(fillipyx, fillipyy):
                     break # break out of while loop, continue in for loop
-            if not isOnBoard(x, y):
+            if not isOnBoard(fillipyx, fillipyy):
                 continue
-            if board[x][y] == tile:
+            if board[fillipyx][fillipyy] == tile:
                 # There are pieces to flip over. Go in the reverse
                 # direction until we reach the original space, noting all
                 # the tiles along the way.
                 while True:
-                    x -= xdirection
-                    y -= ydirection
-                    if x == xstart and y == ystart:
+                    fillipyx -= xdirection
+                    fillipyy -= ydirection
+                    if fillipyx == xstart and fillipyy == ystart:
                         break
-                    tilesToFlip.append([x, y])
+                    tilesToFlip.append([fillipyx, fillipyy])
 
     board[xstart][ystart] = EMPTY_SPACE # make space empty
     if len(tilesToFlip) == 0: # If no tiles flipped, this move is invalid
@@ -516,28 +516,28 @@ def isValidMove(board, tile, xstart, ystart):
     return tilesToFlip
 
 
-def isOnBoard(x, y):
+def isOnBoard(fillipyx, fillipyy):
     # Returns True if the coordinates are located on the board.
-    return x >= 0 and x < BOARDWIDTH and y >= 0 and y < BOARDHEIGHT
+    return fillipyx >= 0 and fillipyx < BOARDWIDTH and fillipyy >= 0 and fillipyy < BOARDHEIGHT
 
 
 def getBoardWithValidMoves(board, tile):
     # Returns a new board with hint markings.
     dupeBoard = copy.deepcopy(board)
 
-    for x, y in getValidMoves(dupeBoard, tile):
-        dupeBoard[x][y] = HINT_TILE
+    for fillipyx, fillipyy in getValidMoves(dupeBoard, tile):
+        dupeBoard[fillipyx][fillipyy] = HINT_TILE
     return dupeBoard
 
 
 def getValidMoves(board, tile):
-    # Returns a list of (x,y) tuples of all valid moves.
+    # Returns a list of (fillipyx,fillipyy) tuples of all valid moves.
     validMoves = []
 
-    for x in range(BOARDWIDTH):
-        for y in range(BOARDHEIGHT):
-            if isValidMove(board, tile, x, y) != False:
-                validMoves.append((x, y))
+    for fillipyx in range(BOARDWIDTH):
+        for fillipyy in range(BOARDHEIGHT):
+            if isValidMove(board, tile, fillipyx, fillipyy) != False:
+                validMoves.append((fillipyx, fillipyy))
     return validMoves
 
 
@@ -545,11 +545,11 @@ def getScoreOfBoard(board):
     # Determine the score by counting the tiles.
     xscore = 0
     oscore = 0
-    for x in range(BOARDWIDTH):
-        for y in range(BOARDHEIGHT):
-            if board[x][y] == WHITE_TILE:
+    for fillipyx in range(BOARDWIDTH):
+        for fillipyy in range(BOARDHEIGHT):
+            if board[fillipyx][fillipyy] == WHITE_TILE:
                 xscore += 1
-            if board[x][y] == BLACK_TILE:
+            if board[fillipyx][fillipyy] == BLACK_TILE:
                 oscore += 1
     return {WHITE_TILE:xscore, BLACK_TILE:oscore}
 
@@ -605,40 +605,40 @@ def makeMove(board, tile, xstart, ystart, realMove=False):
     if realMove:
         animateTileChange(tilesToFlip, tile, (xstart, ystart))
 
-    for x, y in tilesToFlip:
-        board[x][y] = tile
+    for fillipyx, fillipyy in tilesToFlip:
+        board[fillipyx][fillipyy] = tile
     return True
 
 
-def isOnCorner(x, y):
+def isOnCorner(fillipyx, fillipyy):
     # Returns True if the position is in one of the four corners.
-    return (x == 0 and y == 0) or \
-           (x == BOARDWIDTH and y == 0) or \
-           (x == 0 and y == BOARDHEIGHT) or \
-           (x == BOARDWIDTH and y == BOARDHEIGHT)
+    return (fillipyx == 0 and fillipyy == 0) or \
+           (fillipyx == BOARDWIDTH and fillipyy == 0) or \
+           (fillipyx == 0 and fillipyy == BOARDHEIGHT) or \
+           (fillipyx == BOARDWIDTH and fillipyy == BOARDHEIGHT)
 
 
 def getComputerMove(board, computerTile):
     # Given a board and the computer's tile, determine where to
-    # move and return that move as a [x, y] list.
+    # move and return that move as a [fillipyx, fillipyy] list.
     possibleMoves = getValidMoves(board, computerTile)
 
     # randomize the order of the possible moves
     random.shuffle(possibleMoves)
 
     # always go for a corner if available.
-    for x, y in possibleMoves:
-        if isOnCorner(x, y):
-            return [x, y]
+    for fillipyx, fillipyy in possibleMoves:
+        if isOnCorner(fillipyx, fillipyy):
+            return [fillipyx, fillipyy]
 
     # Go through all possible moves and remember the best scoring move
     bestScore = -1
-    for x, y in possibleMoves:
+    for fillipyx, fillipyy in possibleMoves:
         dupeBoard = copy.deepcopy(board)
-        makeMove(dupeBoard, computerTile, x, y)
+        makeMove(dupeBoard, computerTile, fillipyx, fillipyy)
         score = getScoreOfBoard(dupeBoard)[computerTile]
         if score > bestScore:
-            bestMove = [x, y]
+            bestMove = [fillipyx, fillipyy]
             bestScore = score
     return bestMove
 
